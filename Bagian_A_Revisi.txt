@@ -1,0 +1,144 @@
+1. JUDUL PROJECT
+
+Pengujian Sistem Aplikasi TaskOrbit - Sistem Manajemen Tugas Mahasiswa
+
+
+2. REQUIREMENT & ANALISIS SISTEM
+
+2.1 Deskripsi Sistem
+
+TaskOrbit adalah aplikasi berbasis web yang digunakan untuk membantu mahasiswa dalam mengelola tugas-tugas kuliah secara lebih teratur. Melalui aplikasi ini, mahasiswa dapat mencatat tugas, menentukan deadline, mengelompokkan tugas berdasarkan kategori, serta memantau status pengerjaan tugas.
+
+Sistem ini dirancang agar mahasiswa tidak lupa terhadap tugas yang harus dikerjakan dan dapat mengetahui tugas mana yang paling mendesak berdasarkan deadline. Selain itu, aplikasi ini menyediakan dashboard yang menampilkan ringkasan tugas sehingga pengguna dapat melihat kondisi tugas secara cepat dan mudah.
+
+
+2.1.1 Tujuan Sistem
+
+Tujuan dari sistem Student Task Manager adalah untuk memudahkan mahasiswa dalam mengatur dan memantau tugas kuliah secara terstruktur. Sistem ini membantu pengguna mencatat setiap tugas yang diberikan, menentukan batas waktu pengerjaan, mengelompokkan tugas berdasarkan kategori, serta mengetahui status penyelesaian tugas.
+
+Dengan adanya sistem ini, mahasiswa dapat lebih mudah mengatur prioritas pekerjaan, terutama tugas yang memiliki deadline dekat. Sistem juga bertujuan untuk meningkatkan kedisiplinan dan manajemen waktu mahasiswa agar proses pengerjaan tugas menjadi lebih efektif, terorganisir, dan tidak terlambat dikumpulkan.
+
+
+2.1.2 Aktor Sistem
+
+1. Mahasiswa
+   Mahasiswa adalah pengguna utama aplikasi. Mahasiswa dapat melakukan registrasi, login, mengelola tugas, mengelola kategori, melihat dashboard, mencari tugas, memfilter tugas berdasarkan status, serta mengubah status pengerjaan tugas.
+
+2. Sistem
+   Sistem berperan dalam memproses data yang dimasukkan pengguna, menyimpan data ke database, menghitung prioritas tugas secara otomatis berdasarkan deadline, serta menampilkan ringkasan data pada dashboard.
+
+
+2.1.3 Fitur Utama
+
+1. Pengelolaan Tugas
+   Fitur ini digunakan untuk menambahkan, melihat, mengubah, dan menghapus data tugas. Data tugas yang dikelola meliputi judul tugas, deskripsi tugas, deadline, kategori, dan status pengerjaan.
+
+2. Pengelolaan Kategori Tugas
+   Fitur ini digunakan untuk mengelompokkan tugas berdasarkan jenis tertentu, seperti tugas kuliah, praktikum, organisasi, atau tugas pribadi. Dengan adanya kategori, tugas menjadi lebih rapi dan mudah dikelola.
+
+3. Pengaturan Deadline
+   Fitur ini memungkinkan mahasiswa menentukan batas waktu pengerjaan pada setiap tugas. Deadline digunakan oleh sistem untuk membantu menentukan prioritas tugas.
+
+4. Perubahan Status Tugas
+   Fitur ini digunakan untuk mengubah status tugas sesuai kondisi pengerjaan. Status yang tersedia adalah Belum Dikerjakan, Sedang Dikerjakan, dan Selesai.
+
+5. Dashboard Ringkasan Tugas
+   Fitur ini menampilkan ringkasan jumlah tugas, jumlah tugas selesai, jumlah kategori, serta grafik status tugas. Dashboard membantu mahasiswa melihat kondisi tugas secara cepat.
+
+6. Pencarian dan Filter Tugas
+   Fitur ini digunakan untuk mencari tugas berdasarkan judul serta memfilter tugas berdasarkan status pengerjaan. Fitur ini membantu mahasiswa menemukan tugas tertentu dengan lebih mudah.
+
+7. Penentuan Prioritas Tugas
+   Fitur ini membantu mahasiswa mengetahui tingkat prioritas tugas berdasarkan deadline. Sistem secara otomatis menentukan prioritas tugas menjadi Sangat Tinggi (Overdue), Tinggi, Medium, Rendah, atau Normal.
+
+
+2.1.4 Teknologi yang Digunakan
+
+1. Laravel
+   Laravel digunakan sebagai framework utama dalam pengembangan sistem TaskOrbit. Framework ini membantu proses pembuatan aplikasi web, seperti pengaturan route, controller, model, autentikasi, validasi data, relasi database, dan pengujian.
+
+2. PHP
+   PHP digunakan sebagai bahasa pemrograman utama pada sisi backend. Bahasa ini menjalankan logika sistem, seperti proses autentikasi, pengelolaan tugas, pengelolaan kategori, perubahan status tugas, dan perhitungan prioritas tugas.
+
+3. MySQL atau MariaDB
+   MySQL atau MariaDB digunakan sebagai database utama untuk menyimpan data sistem. Data yang disimpan meliputi data pengguna, data tugas, data kategori, deadline, dan status tugas.
+
+4. SQLite
+   SQLite digunakan sebagai database pengujian pada konfigurasi PHPUnit. Penggunaan SQLite in-memory membuat proses feature testing berjalan lebih cepat dan tidak bergantung pada konfigurasi MySQL lokal.
+
+5. Blade Template
+   Blade Template digunakan sebagai template engine bawaan Laravel untuk membuat tampilan halaman web. Dengan Blade, tampilan aplikasi dapat dibuat lebih terstruktur dan mudah dihubungkan dengan data dari sistem.
+
+6. Tailwind CSS
+   Tailwind CSS digunakan untuk membangun tampilan antarmuka aplikasi yang modern, responsif, dan konsisten. Styling aplikasi dikompilasi melalui Vite.
+
+7. Vite
+   Vite digunakan sebagai frontend build tool untuk mengelola dan membangun asset CSS dan JavaScript aplikasi.
+
+8. Chart.js
+   Chart.js digunakan untuk menampilkan grafik pada dashboard. Grafik ini membantu pengguna melihat ringkasan jumlah tugas berdasarkan status pengerjaan.
+
+9. FontAwesome
+   FontAwesome digunakan untuk menampilkan ikon pada tampilan aplikasi. Ikon membantu memperjelas fungsi tombol atau menu sehingga tampilan sistem menjadi lebih mudah dipahami.
+
+10. Alpine.js
+    Alpine.js digunakan untuk mendukung interaksi ringan pada tampilan, seperti menu dropdown, menu mobile, dan toggle tema gelap/terang.
+
+11. PHPUnit
+    PHPUnit digunakan untuk melakukan pengujian unit dan feature testing. Pengujian ini bertujuan untuk memastikan fungsi-fungsi penting dalam aplikasi berjalan sesuai dengan kebutuhan.
+
+
+2.2 Functional Requirement
+
+| No | Req ID | Requirement | Deskripsi | Aktor |
+| :---: | :---: | ----- | ----- | :---: |
+| 1 | REQ-01 | User dapat melakukan registrasi akun | Mahasiswa dapat mendaftar akun baru dengan mengisi nama, email, password, dan konfirmasi password yang valid. | Mahasiswa |
+| 2 | REQ-02 | User dapat melakukan login ke sistem | Mahasiswa dapat masuk ke sistem menggunakan email dan password yang telah terdaftar. | Mahasiswa |
+| 3 | REQ-03 | User dapat menambahkan tugas baru | Mahasiswa dapat membuat tugas baru dengan mengisi judul, deskripsi, kategori, dan deadline. | Mahasiswa |
+| 4 | REQ-04 | User dapat mengubah status tugas | Mahasiswa dapat mengubah status tugas menjadi Belum Dikerjakan, Sedang Dikerjakan, atau Selesai. | Mahasiswa |
+| 5 | REQ-05 | User dapat mengelola kategori tugas | Mahasiswa dapat menambahkan, mengedit, dan menghapus kategori untuk mengelompokkan tugas. | Mahasiswa |
+| 6 | REQ-06 | Sistem menghitung prioritas tugas otomatis | Sistem secara otomatis menentukan prioritas tugas berdasarkan sisa waktu deadline. | Sistem |
+| 7 | REQ-07 | User dapat mencari dan memfilter tugas | Mahasiswa dapat mencari tugas berdasarkan judul dan memfilter tugas berdasarkan status pengerjaan. | Mahasiswa |
+| 8 | REQ-08 | User dapat melihat dashboard ringkasan tugas | Mahasiswa dapat melihat jumlah tugas, jumlah tugas selesai, jumlah kategori, dan grafik status tugas. | Mahasiswa |
+| 9 | REQ-09 | User dapat logout dari sistem | Mahasiswa dapat keluar dari sistem setelah berhasil login. | Mahasiswa |
+
+
+2.3 Use Case Diagram
+
+Use Case Diagram aplikasi TaskOrbit menggambarkan interaksi antara aktor Mahasiswa dan Sistem dengan fungsionalitas utama aplikasi.
+
+Aktor:
+1. Mahasiswa
+2. Sistem
+
+Use case utama:
+1. Registrasi akun
+2. Login
+3. Logout
+4. Melihat dashboard
+5. Mengelola tugas
+6. Mengubah status tugas
+7. Mengelola kategori
+8. Mencari dan memfilter tugas
+9. Menghitung prioritas tugas otomatis
+
+Catatan:
+Use case "Menghitung prioritas tugas otomatis" dilakukan oleh Sistem berdasarkan deadline tugas.
+
+
+2.4 Requirement Traceability Matrix (RTM)
+
+Requirement Traceability Matrix (RTM) berikut menghubungkan setiap kebutuhan fungsional dengan test case dan level pengujian yang sesuai. RTM memastikan bahwa seluruh requirement tercakup oleh pengujian di level Unit, Feature/Integration, dan System.
+
+| Req ID | Requirement | Test Case ID | Level Testing | Status |
+| :---: | ----- | ----- | ----- | :---: |
+| REQ-01 | User dapat melakukan registrasi akun | TC-FEATURE-AUTH-03 | Feature/Integration | Implemented |
+| REQ-02 | User dapat melakukan login ke sistem | TC-UNIT-AUTH-01, TC-FEATURE-AUTH-04, TC-FEATURE-AUTH-05 | Unit, Feature/Integration | Implemented |
+| REQ-03 | User dapat menambahkan tugas baru | TC-UNIT-TASK-01, TC-FEATURE-TASK-01 | Unit, Feature/Integration | Implemented |
+| REQ-04 | User dapat mengubah status tugas | TC-FEATURE-TASK-03 | Feature/Integration | Implemented |
+| REQ-05 | User dapat mengelola kategori tugas | TC-FEATURE-CATEGORY-01, TC-FEATURE-CATEGORY-02, TC-FEATURE-CATEGORY-03, TC-FEATURE-CATEGORY-04 | Feature/Integration | Implemented |
+| REQ-06 | Sistem menghitung prioritas tugas otomatis | TC-UNIT-PRIORITY-01 | Unit | Implemented |
+| REQ-07 | User dapat mencari dan memfilter tugas | TC-FEATURE-TASK-INDEX | Feature/Integration | Implemented |
+| REQ-08 | User dapat melihat dashboard ringkasan tugas | TC-FEATURE-DASHBOARD | Feature/Integration | Implemented |
+| REQ-09 | User dapat logout dari sistem | TC-FEATURE-AUTH-LOGOUT | Feature/Integration | Implemented |
+

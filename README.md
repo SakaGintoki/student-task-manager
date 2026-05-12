@@ -60,5 +60,6 @@ Aplikasi ini dilengkapi dengan pengujian otomatis berstandar industri:
 Dokumentasi lengkap mengenai analisis pengujian (CFG, Cyclomatic Complexity, RTM, Usecase) dapat dilihat di folder `docs/`.
 
 ## Author
+
 [Nama Anda / Mahasiswa]
 Tugas Pengujian Perangkat Lunak 2026
