@@ -14,14 +14,14 @@ class AuthTest extends TestCase
     {
         $response = $this->get('/login');
         $response->assertStatus(200);
-        $response->assertSee('Login');
+        $response->assertSee('Masuk');
     }
 
     public function test_user_can_view_register_page()
     {
         $response = $this->get('/register');
         $response->assertStatus(200);
-        $response->assertSee('Register');
+        $response->assertSee('Daftar');
     }
 
     public function test_user_can_register()

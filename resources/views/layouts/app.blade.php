@@ -1,200 +1,186 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full" x-data :class="{ 'dark': $store.theme.darkMode }">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'TaskOrbit') }} - Sistem Manajemen Tugas</title>
+    <title>{{ config('app.name', 'TaskOrbit') }} - Manajemen Tugas Profesional</title>
     
-    <!-- Google Fonts: Poppins -->
+    <!-- Vite -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Custom Modern CSS -->
+    <!-- Theme Script (No-flicker) -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('color-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+
+    <!-- Alpine.js -->
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('theme', {
+                darkMode: localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+                
+                toggle() {
+                    this.darkMode = !this.darkMode;
+                    localStorage.setItem('color-theme', this.darkMode ? 'dark' : 'light');
+                    window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: this.darkMode ? 'dark' : 'light' } }));
+                }
+            })
+        })
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <style>
-        :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
-            --secondary-color: #f3f4f6;
-            --text-dark: #1f2937;
-            --text-muted: #6b7280;
-            --bg-color: #f8fafc;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-        }
-
-        /* Navbar Styling */
-        .navbar {
-            background: linear-gradient(135deg, var(--primary-color), #6366f1) !important;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            padding: 1rem 0;
-        }
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.5rem;
-            letter-spacing: -0.5px;
-        }
-        .navbar-brand i {
-            margin-right: 8px;
-        }
-        .nav-link {
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        .nav-link:hover {
-            opacity: 0.8;
-            transform: translateY(-1px);
-        }
-
-        /* Card Styling */
-        .card {
-            border: none;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            background: #ffffff;
-            overflow: hidden;
-        }
-        .card.hover-elevate:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        .card-header {
-            background-color: transparent;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            font-weight: 600;
-            padding: 1.25rem 1.5rem;
-        }
-
-        /* Button Styling */
-        .btn {
-            border-radius: 8px;
-            padding: 0.5rem 1.25rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            border-color: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-        }
-
-        /* Form Styling */
-        .form-control, .form-select {
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            border: 1px solid #d1d5db;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.25);
-        }
-
-        /* Badges */
-        .badge {
-            padding: 0.5em 0.75em;
-            border-radius: 6px;
-            font-weight: 500;
-        }
-        
-        /* Layout */
-        .main-content {
-            padding-top: 2rem;
-            padding-bottom: 4rem;
-        }
-
-        /* Utilities */
-        .text-gradient {
-            background: linear-gradient(135deg, var(--primary-color), #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        [x-cloak] { display: none !important; }
+        [v-cloak] { display: none; }
     </style>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark mb-4 sticky-top">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
-                <i class="fa-solid fa-rocket"></i> TaskOrbit
-            </a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+<body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 transition-colors duration-300">
+    
+    <!-- Navbar -->
+    <nav class="glass-nav sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800" x-data="{ mobileMenuOpen: false }">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{{ url('/') }}" class="flex items-center space-x-2 group">
+                        <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary-500/20 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <span class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">TaskOrbit</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-4">
                     @auth
-                        <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i class="fa-solid fa-chart-pie me-1"></i> Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('tasks.index') }}"><i class="fa-solid fa-list-check me-1"></i> Tugas</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('categories.index') }}"><i class="fa-solid fa-tags me-1"></i> Kategori</a></li>
+                        <a href="{{ route('dashboard') }}" class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('dashboard') ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/20 dark:text-primary-400' : 'text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400' }}">Dashboard</a>
+                        <a href="{{ route('tasks.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('tasks.*') ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/20 dark:text-primary-400' : 'text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400' }}">Tugas</a>
+                        <a href="{{ route('categories.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('categories.*') ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/20 dark:text-primary-400' : 'text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400' }}">Kategori</a>
+                        
+                        <div class="w-px h-6 bg-slate-200 dark:border-slate-800"></div>
+                        
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" @click.away="open = false" class="flex items-center space-x-3 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=6366f1&color=fff&bold=true" class="w-8 h-8 rounded-full border border-white dark:border-slate-700" alt="Avatar">
+                                <span class="text-sm font-semibold pr-2">{{ Auth::user()->name }}</span>
+                            </button>
+                            <!-- Dropdown -->
+                            <div x-show="open" class="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl py-2 z-50">
+                                <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-800 mb-1 text-xs text-slate-500 uppercase font-bold tracking-wider">Akun Saya</div>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 flex items-center">
+                                        <i class="fa-solid fa-right-from-bracket mr-2"></i> Keluar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     @endauth
-                </ul>
-                <ul class="navbar-nav ms-auto align-items-center">
+
                     @guest
-                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Masuk</a></li>
-                        <li class="nav-item ms-lg-2"><a class="btn btn-light btn-sm fw-bold text-primary px-3 rounded-pill" href="{{ route('register') }}">Daftar</a></li>
-                    @else
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=e0e7ff&color=4f46e5" alt="Avatar" class="rounded-circle me-2" width="32" height="32">
-                                {{ Auth::user()->name }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2" style="border-radius: 12px;">
-                                <li>
-                                    <form action="{{ route('logout') }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item text-danger"><i class="fa-solid fa-right-from-bracket me-2"></i>Keluar</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
+                        <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-primary-600">Masuk</a>
+                        <a href="{{ route('register') }}" class="bg-primary-600 hover:bg-primary-700 text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-primary-600/20 transition-all hover:-translate-y-0.5">Daftar Gratis</a>
                     @endguest
-                </ul>
+
+                    <button @click="$store.theme.toggle()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+                        <i x-show="!$store.theme.darkMode" class="fa-solid fa-moon"></i>
+                        <i x-show="$store.theme.darkMode" class="fa-solid fa-sun" x-cloak></i>
+                    </button>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center space-x-2">
+                    <button @click="$store.theme.toggle()" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <i x-show="!$store.theme.darkMode" class="fa-solid fa-moon"></i>
+                        <i x-show="$store.theme.darkMode" class="fa-solid fa-sun" x-cloak></i>
+                    </button>
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <i class="fa-solid fa-bars-staggered text-xl"></i>
+                    </button>
+                </div>
             </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" class="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 py-4 space-y-2">
+            @auth
+                <a href="{{ route('dashboard') }}" class="block px-4 py-3 rounded-xl text-base font-semibold {{ request()->routeIs('dashboard') ? 'bg-primary-50 text-primary-600' : 'text-slate-600' }}">Dashboard</a>
+                <a href="{{ route('tasks.index') }}" class="block px-4 py-3 rounded-xl text-base font-semibold {{ request()->routeIs('tasks.*') ? 'bg-primary-50 text-primary-600' : 'text-slate-600' }}">Tugas</a>
+                <a href="{{ route('categories.index') }}" class="block px-4 py-3 rounded-xl text-base font-semibold {{ request()->routeIs('categories.*') ? 'bg-primary-50 text-primary-600' : 'text-slate-600' }}">Kategori</a>
+                <hr class="border-slate-200 dark:border-slate-800">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-full text-left px-4 py-3 text-base font-semibold text-red-600">Keluar</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="block px-4 py-3 rounded-xl text-base font-semibold text-slate-600">Masuk</a>
+                <a href="{{ route('register') }}" class="block px-4 py-3 rounded-xl text-base font-semibold bg-primary-600 text-white text-center">Daftar Sekarang</a>
+            @endguest
         </div>
     </nav>
 
-    <div class="container main-content">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-screen">
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert" style="border-radius: 12px;">
-                <i class="fa-solid fa-check-circle me-2"></i> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div id="alert-success" class="flex items-center p-4 mb-6 text-emerald-800 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800 animate-in fade-in slide-in-from-top-4 duration-500" role="alert">
+                <i class="fa-solid fa-circle-check text-xl mr-3"></i>
+                <div class="text-sm font-bold">{{ session('success') }}</div>
+                <button type="button" onclick="this.parentElement.remove()" class="ml-auto text-emerald-500 hover:text-emerald-700">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
         @endif
 
         @if($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm" role="alert" style="border-radius: 12px;">
-                <div class="d-flex">
-                    <i class="fa-solid fa-triangle-exclamation mt-1 me-2"></i>
-                    <ul class="mb-0 ps-3">
-                        @foreach($errors->all() as $error)
+            <div class="flex p-4 mb-6 text-red-800 rounded-2xl bg-red-50 dark:bg-red-900/20 dark:text-red-400 border border-red-100 dark:border-red-800" role="alert">
+                <i class="fa-solid fa-circle-exclamation text-xl mr-3 mt-0.5"></i>
+                <div>
+                    <span class="font-bold">Terjadi Kesalahan:</span>
+                    <ul class="mt-1.5 list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
 
         @yield('content')
-    </div>
+    </main>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex flex-col items-center">
+                <div class="flex items-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center text-white text-xs">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <span class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">TaskOrbit</span>
+                </div>
+                <p class="text-slate-500 dark:text-slate-400 text-sm max-w-md mx-auto mb-8">Solusi manajemen tugas akademik paling modern untuk mahasiswa produktif masa kini.</p>
+                <div class="flex space-x-6 mb-8 text-slate-400 dark:text-slate-500">
+                    <a href="#" class="hover:text-primary-600 transition-colors"><i class="fa-brands fa-github text-xl"></i></a>
+                    <a href="#" class="hover:text-primary-600 transition-colors"><i class="fa-brands fa-twitter text-xl"></i></a>
+                    <a href="#" class="hover:text-primary-600 transition-colors"><i class="fa-brands fa-linkedin text-xl"></i></a>
+                </div>
+                <p class="text-slate-400 dark:text-slate-600 text-xs font-medium uppercase tracking-widest">&copy; {{ date('Y') }} TaskOrbit. Crafted for Excellence.</p>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @stack('scripts')
 </body>
