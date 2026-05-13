@@ -62,4 +62,11 @@ Dokumentasi lengkap mengenai analisis pengujian (CFG, Cyclomatic Complexity, RTM
 ## Author
 
 [Nama Anda / Mahasiswa]
+
 Tugas Pengujian Perangkat Lunak 2026
+=======
+- Brahmantio Jati Pambudi
+- Darvesh Aziz Mawla
+- Malvinshah Haris Athala 
+- Steven Anthony
+- Joshua Washington Hutasoit
