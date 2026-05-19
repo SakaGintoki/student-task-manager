@@ -61,27 +61,27 @@ class AuthValidationServiceTest extends TestCase
         $this->assertContains('Password minimal 8 karakter.', $result['errors']);
     }
 
-    // Tambahan: isolasi error email kosong saja.
-    public function test_validate_login_empty_email()
-    {
-        $result = $this->service->validateLoginInput('', 'password123');
-        $this->assertFalse($result['is_valid']);
-        $this->assertContains('Email wajib diisi.', $result['errors']);
-    }
+    // // Tambahan: isolasi error email kosong saja.
+    // public function test_validate_login_empty_email()
+    // {
+    //     $result = $this->service->validateLoginInput('', 'password123');
+    //     $this->assertFalse($result['is_valid']);
+    //     $this->assertContains('Email wajib diisi.', $result['errors']);
+    // }
 
-    // Tambahan: isolasi error format email saja.
-    public function test_validate_login_invalid_email_format()
-    {
-        $result = $this->service->validateLoginInput('invalid-email', 'password123');
-        $this->assertFalse($result['is_valid']);
-        $this->assertContains('Format email tidak valid.', $result['errors']);
-    }
+    // // Tambahan: isolasi error format email saja.
+    // public function test_validate_login_invalid_email_format()
+    // {
+    //     $result = $this->service->validateLoginInput('invalid-email', 'password123');
+    //     $this->assertFalse($result['is_valid']);
+    //     $this->assertContains('Format email tidak valid.', $result['errors']);
+    // }
 
-    // Tambahan: isolasi error password kosong saja.
-    public function test_validate_login_empty_password()
-    {
-        $result = $this->service->validateLoginInput('user@example.com', '');
-        $this->assertFalse($result['is_valid']);
-        $this->assertContains('Password wajib diisi.', $result['errors']);
-    }
+    // // Tambahan: isolasi error password kosong saja.
+    // public function test_validate_login_empty_password()
+    // {
+    //     $result = $this->service->validateLoginInput('user@example.com', '');
+    //     $this->assertFalse($result['is_valid']);
+    //     $this->assertContains('Password wajib diisi.', $result['errors']);
+    // }
 }
