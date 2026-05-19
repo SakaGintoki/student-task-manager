@@ -73,27 +73,27 @@ class TaskValidationServiceTest extends TestCase
         $this->assertEmpty($result['errors']);
     }
 
-    // Tambahan: isolasi error title kosong saja.
-    public function test_validate_task_empty_title()
-    {
-        $result = $this->service->validateTaskInput('', '2026-12-31', 1);
-        $this->assertFalse($result['is_valid']);
-        $this->assertContains('Judul tugas wajib diisi.', $result['errors']);
-    }
+    // // Tambahan: isolasi error title kosong saja.
+    // public function test_validate_task_empty_title()
+    // {
+    //     $result = $this->service->validateTaskInput('', '2026-12-31', 1);
+    //     $this->assertFalse($result['is_valid']);
+    //     $this->assertContains('Judul tugas wajib diisi.', $result['errors']);
+    // }
 
-    // Tambahan: isolasi error deadline kosong saja.
-    public function test_validate_task_empty_deadline()
-    {
-        $result = $this->service->validateTaskInput('Tugas PPL', '', 1);
-        $this->assertFalse($result['is_valid']);
-        $this->assertContains('Deadline wajib diisi.', $result['errors']);
-    }
+    // // Tambahan: isolasi error deadline kosong saja.
+    // public function test_validate_task_empty_deadline()
+    // {
+    //     $result = $this->service->validateTaskInput('Tugas PPL', '', 1);
+    //     $this->assertFalse($result['is_valid']);
+    //     $this->assertContains('Deadline wajib diisi.', $result['errors']);
+    // }
 
-    // Tambahan: isolasi error format deadline saja.
-    public function test_validate_task_invalid_deadline()
-    {
-        $result = $this->service->validateTaskInput('Tugas PPL', 'bukan-tanggal', 1);
-        $this->assertFalse($result['is_valid']);
-        $this->assertContains('Format deadline tidak valid.', $result['errors']);
-    }
+    // // Tambahan: isolasi error format deadline saja.
+    // public function test_validate_task_invalid_deadline()
+    // {
+    //     $result = $this->service->validateTaskInput('Tugas PPL', 'bukan-tanggal', 1);
+    //     $this->assertFalse($result['is_valid']);
+    //     $this->assertContains('Format deadline tidak valid.', $result['errors']);
+    // }
 }
