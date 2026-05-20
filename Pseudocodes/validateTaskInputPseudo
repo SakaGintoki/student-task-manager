@@ -1,0 +1,23 @@
+FUNCTION validateTaskInput(title, deadline, categoryId):
+    errors ← []
+
+    IF title is empty THEN
+        ADD "Judul tugas wajib diisi." TO errors
+    ELSE IF length(title) > 255 THEN
+        ADD "Judul tugas terlalu panjang." TO errors
+    END IF
+
+    IF deadline is empty THEN
+        ADD "Deadline wajib diisi." TO errors
+    ELSE
+        IF deadline is not a valid date/time string THEN
+            ADD "Format deadline tidak valid." TO errors
+        END IF
+    END IF
+
+    IF categoryId is null OR categoryId <= 0 THEN
+        ADD "Kategori wajib dipilih." TO errors
+    END IF
+
+    RETURN { is_valid: (errors is empty), errors: errors }
+END FUNCTION

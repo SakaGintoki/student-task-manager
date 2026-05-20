@@ -1,64 +1,58 @@
 <?php
-
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use App\Services\TaskPriorityService;
-use Carbon\Carbon;
 
 class TaskPriorityServiceTest extends TestCase
 {
-    protected $service;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->service = new TaskPriorityService();
-    }
-
-    // TC-UNIT-12 / Path 1: deadline kosong.
-    public function test_priority_empty_deadline()
-    {
-        $result = $this->service->calculateTaskPriority(null);
-        $this->assertEquals('Normal', $result);
-    }
-
-    // TC-UNIT-13 / Path 2: deadline tidak dapat di-parse dan masuk catch.
-    public function test_priority_invalid_deadline()
-    {
-        $result = $this->service->calculateTaskPriority('invalid-xyz');
-        $this->assertEquals('Normal', $result);
-    }
-
-    // TC-UNIT-14 / Path 3: deadline sudah lewat.
-    public function test_priority_overdue()
-    {
-        $deadline = Carbon::now()->subDay()->toDateTimeString();
-        $result = $this->service->calculateTaskPriority($deadline);
-        $this->assertEquals('Sangat Tinggi (Overdue)', $result);
-    }
-
-    // TC-UNIT-15 / Path 4: deadline kurang dari atau sama dengan 1 hari.
-    public function test_priority_high()
-    {
-        $deadline = Carbon::now()->addHours(12)->toDateTimeString();
-        $result = $this->service->calculateTaskPriority($deadline);
-        $this->assertEquals('Tinggi', $result);
-    }
-
-    // TC-UNIT-16 / Path 5: deadline 2 sampai 3 hari.
-    public function test_priority_medium()
-    {
-        $deadline = Carbon::now()->addDays(2)->toDateTimeString();
-        $result = $this->service->calculateTaskPriority($deadline);
-        $this->assertEquals('Medium', $result);
-    }
-
-    // TC-UNIT-17 / Path 6: deadline lebih dari 3 hari.
-    public function test_priority_low()
-    {
-        $deadline = Carbon::now()->addDays(5)->toDateTimeString();
-        $result = $this->service->calculateTaskPriority($deadline);
-        $this->assertEquals('Rendah', $result);
-    }
+	private TaskPriorityService $service;
+	
+	protected function setUp(): void
+	{
+		parent::setUp();
+		$this->service = new TaskPriorityService();
+	}
+	
+	// TC-UNIT-14: Path 1,2,12
+	public function test_empty_deadline()
+	{
+		$result = $this->service->calculateTaskPriority('');
+		$this->assertEquals('No deadline set',$result);
+	}
+	
+	// TC-UNIT-15: Path 1,3,11,12
+	public function test_exception_deadline()
+	{
+		$result = $this->service->calculateTaskPriority('test');
+		$this->assertEquals('Err',$result);
+	}
+	
+	// TC-UNIT-16: Path 1,3,4,5,12
+	public function test_deadline_yesterday()
+	{
+		$result = $this->service->calculateTaskPriority('-1 day');
+		$this->assertEquals('Sangat Tinggi (Overdue)',$result);
+	}
+	
+	// TC-UNIT-17: Path 1,3,4,6,7,12
+	public function test_deadline_tomorrow()
+	{
+		$result = $this->service->calculateTaskPriority('+1 day');
+		$this->assertEquals('Tinggi',$result);
+	}
+	
+	// TC-UNIT-18: Path 1,3,4,6,8,10,12
+	public function test_deadline_in_5_days()
+	{
+		$result = $this->service->calculateTaskPriority('+5 days');
+		$this->assertEquals('Rendah',$result);
+	}
+	
+	// TC-UNIT-19: Path 1,3,4,6,8,9,12
+	public function test_deadline_in_3_days()
+	{
+		$result = $this->service->calculateTaskPriority('+3 days');
+		$this->assertEquals('Medium',$result);
+	}
 }

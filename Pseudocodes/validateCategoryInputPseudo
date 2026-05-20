@@ -1,0 +1,15 @@
+FUNCTION validateCategoryInput(name, description):
+    errors ← []
+
+    IF name is empty THEN
+        ADD "Nama kategori wajib diisi." TO errors
+    ELSE IF length(name) > 255 THEN
+        ADD "Nama kategori terlalu panjang." TO errors
+    END IF
+
+    IF description is not null AND length(description) > 1000 THEN
+        ADD "Deskripsi kategori terlalu panjang." TO errors
+    END IF
+
+    RETURN { is_valid: (errors is empty), errors: errors }
+END FUNCTION

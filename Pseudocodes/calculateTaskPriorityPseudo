@@ -1,0 +1,27 @@
+FUNCTION calculateTaskPriority(deadline):
+    IF deadline is empty THEN
+        RETURN "Normal"
+    END IF
+
+    TRY
+        deadlineDate ← parse(deadline) as date
+        now ← current date and time
+
+        IF deadlineDate is in the past THEN
+            RETURN "Sangat Tinggi (Overdue)"
+        END IF
+
+        diffInDays ← difference in days between now and deadlineDate
+
+        IF diffInDays <= 1 THEN
+            RETURN "Tinggi"
+        ELSE IF diffInDays <= 3 THEN
+            RETURN "Medium"
+        ELSE
+            RETURN "Rendah"
+        END IF
+
+    CATCH parsing error
+        RETURN "Normal"
+    END TRY
+END FUNCTION
